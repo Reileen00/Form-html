@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Accessible Form UI</title>
+
+<style>
+:root {
+    --primary: #1a73e8;
+    --border: #ccc;
+    --error: #d93025;
+    --success: #188038;
+    --bg: #ffffff;
+    --text: #202124;
+}
+
+body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #f5f7fa;
+    color: var(--text);
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 900px;
+    margin: 5rem auto;
+    background: var(--bg);
+    border-radius: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2.5rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* ---------------- Form ---------------- */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+label {
+    font-weight: 600;
+}
+
+input {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 0.4rem;
+    border: 2px solid var(--border);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(26,115,232,0.25);
+}
+
+/* Error handling (static demo) */
+input:invalid {
+    border-color: var(--error);
+}
+
+.error {
+    font-size: 0.85rem;
+    color: var(--error);
+    display: none;
+}
+
+input:invalid:not(:focus) + .error {
+    display: block;
+}
+
+/* Password toggle button (UI only) */
+.password-wrapper {
+    position: relative;
+}
+
+.toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.toggle-btn:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Submit */
+button[type="submit"] {
+    margin-top: 1rem;
+    padding: 0.9rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+}
+
+button[type="submit"]:focus {
+    outline: 3px solid rgba(26,115,232,0.4);
+}
+
+/* ---------------- Side Panel ---------------- */
+
+.outputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Progress bar */
+.progress-container {
+    background: #e6e6e6;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 60%; /* Static demo */
+    height: 100%;
+    background: var(--success);
+}
+
+/* Checklist */
+.checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.checklist li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.checklist li::before {
+    content: "✔";
+    color: var(--success);
+    font-weight: bold;
+}
+
+.checklist .incomplete::before {
+    content: "✖";
+    color: var(--error);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Form -->
+    <form aria-labelledby="form-title">
+        <h2 id="form-title">Create Account</h2>
+
+        <label for="fname">Full Name</label>
+        <input id="fname" type="text" aria-required="true" required />
+
+        <label for="email">Email</label>
+        <input id="email" type="email" aria-required="true" required />
+        <span class="error" aria-live="polite">
+            Please enter a valid email address.
+        </span>
+
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+            <input id="password" type="password" aria-required="true" required />
+            <button
+                type="button"
+                class="toggle-btn"
+                aria-label="Password is hidden">
+                Show
+            </button>
+        </div>
+
+        <label for="confirm">Confirm Password</label>
+        <input id="confirm" type="password" aria-required="true" required />
+
+        <button type="submit">Create Account</button>
+    </form>
+
+    <!-- Side Info -->
+    <div class="outputs" aria-live="polite">
+        <div>
+            <strong>Profile Completion</strong>
+            <div class="progress-container" aria-hidden="true">
+                <div class="progress-bar"></div>
+            </div>
+            <small>60% complete</small>
+        </div>
+
+        <div>
+            <strong>Requirements</strong>
+            <ul class="checklist">
+                <li>Full name entered</li>
+                <li>Email format valid</li>
+                <li class="incomplete">Password strength</li>
+                <li class="incomplete">Passwords match</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
